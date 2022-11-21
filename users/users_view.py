@@ -16,9 +16,14 @@ def users():
     return 'users are welcome'
 
 @router_user.post('/users/create-users')
-def create_users():
-    user_db = UserModel(username='',email='',full_name='',)
-    session = db.session.query()
+def create_users(user_:User):
+    hash_password = get_password_hash(user_.password)
+    userdb = UserModel(username=user_.username,email=user_.email,full_name=user_.full_name,password=hash_password)
+    db.session.add(userdb)
+    db.session.commit()
+    data = db.session.query(UserModel).filter(UserModel.id==userdb.id)
+    
+    return  [i for i in data]
 
 @router_user.post('/token',response_model=Token,)
 async def login_for_accesstoken(form_data: OAuth2PasswordRequestForm = Depends()):

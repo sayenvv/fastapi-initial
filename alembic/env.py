@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+from users.models import Base
 
 # My code
 import os,sys
@@ -26,7 +27,6 @@ config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URI'])
 fileConfig(config.config_file_name)
 
 
-from users.models import Base
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel

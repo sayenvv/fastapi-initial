@@ -6,13 +6,18 @@ name = "pypi"
 [packages]
 fastapi = "*"
 fastapi-sqlalchemy = "*"
-pydantic = "*"
 alembic = "*"
-psycopg2 = "*"
 uvicorn = "*"
 python-dotenv = "*"
+psycopg2-binary = "*"
+python-jose = "*"
+passlib = "*"
+python-multipart = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.8.10"
+
+[packages.pydantic]
+extras = [ "email",]

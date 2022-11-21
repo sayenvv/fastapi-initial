@@ -6,6 +6,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from users.serializers import *
+from typing import Union
 
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
@@ -37,9 +38,8 @@ def get_password_hash(password):
 
 
 def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+    data = db.filter(UserModel.username==username).first()
+    return data
 
 
 def authenticate_user(fake_db, username: str, password: str):
@@ -51,7 +51,7 @@ def authenticate_user(fake_db, username: str, password: str):
     return user
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -76,7 +76,9 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    session = Session(bind=engine,expire_on_commit=False)
+    db = session.query(UserModel)
+    user = get_user(db, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user

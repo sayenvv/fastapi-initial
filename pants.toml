@@ -1,0 +1,29 @@
+[GLOBAL]
+pants_version = "2.14.0"
+use_deprecated_directory_cli_args_semantics = true
+backend_packages = [
+    "pants.backend.python"
+]
+
+[anonymous-telemetry]
+enabled = false
+
+[python-bootstrap]
+search_path = ["<PATH>", "<PYENV>"]
+
+[source]
+root_patterns = ["/"]
+
+[pytest]
+lockfile = "lockfiles/pytest.lock"
+extra_requirements.add = [
+  "schema",
+  "fastapi",
+  "requests",
+  "sqlalchemy",
+  "python-jose",
+  "passlib",
+  "python-multipart",
+]
+
+
